@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+	<title> Chart emulation </title>
+	<link rel="stylesheet" href="css/Treant.css">
+	<link rel="stylesheet" href="css/custom.css">
+</head>
+<button onclick="CallMinMax()">MINIMAX!</button>
+<body>
+	<div class="chart" id="OrganiseChart-simple">
+	</div>
+  <div id="tree" style="width:335px; height: 160px"> </div>
+	<script src="js/raphael.js"></script>
+	<script src="js/Treant.js"></script>
+	<script src="js/custom.js"></script>
+
+	<script>
+		var my_chart = new Treant(simple_chart_config);
+	</script>
+
+</body>
+</html>
