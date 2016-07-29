@@ -4,15 +4,14 @@
 
 //	Objects
 
-function Tree(depth, numChildren, maxGoesFirst) {
+function Tree(depth, maxGoesFirst) {
 	this.depth = depth;
-	this.numChildren = numChildren;
 	this.maxGoesFirst = maxGoesFirst;
 
 	//generate the tree
 	var parentNode = new Node();
 	parentNode.setName('Parent node');
-	parentNode.setChildren(generateChildren(this.depth-1, this.numChildren));
+	parentNode.setChildren(generateChildren(this.depth-1, getRandom(2, 2)));
 
 	this.tree = {
 		chart: {
@@ -30,7 +29,7 @@ function Tree(depth, numChildren, maxGoesFirst) {
 			var newChild = new Node();
 			if (depth > 1) {
 				newChild.setName('child_' + depth);
-				newChild.setChildren(generateChildren(depth-1, numChildren));
+				newChild.setChildren(generateChildren(depth-1, getRandom(2, 2)));
 			} else {
 				var max = 9;
 				var min = 1;
@@ -44,6 +43,11 @@ function Tree(depth, numChildren, maxGoesFirst) {
 		}
 		return children;
 	}
+}
+
+function getRandom(avrgBranchFactor, variance) {
+	var rand = Math.floor((Math.random() * 2 * variance) + avrgBranchFactor - Math.floor(variance/2))
+	return rand;
 }
 
 Tree.prototype.getBestValue = function() {
@@ -102,7 +106,7 @@ Node.prototype.setName = function(name) {
 
 //	Main
 
-var tree = new Tree(5, 2, true);
+var tree = new Tree(4, true);
 tree.render();
 
 function CallMinMax() {
