@@ -2,10 +2,15 @@
 //	minimax-test
 //
 
+// global variables :(
+var pos = new Array();
+var OD;
+
 //	Objects
 
 function Tree(depth, maxGoesFirst) {
 	this.depth = depth;
+	OD = depth - 1;
 	this.maxGoesFirst = maxGoesFirst;
 
 	//generate the tree
@@ -72,6 +77,9 @@ Tree.minmax = function(node, depth, max_player) {
 			v = Tree.minmax(node.children[child], depth - 1, false);
 			best_value = Math.max(v, best_value);
 		}
+		if(depth === OD) {
+			pos.push(best_value);
+		}
 		return best_value;
 	}
 	else {
@@ -82,10 +90,23 @@ Tree.minmax = function(node, depth, max_player) {
 			v = Tree.minmax(node.children[child], depth - 1, true);
 			best_value = Math.min(v, best_value);
 		}
+		if(depth === OD) {
+			pos.push(best_value);
+		}
 		return best_value;
 	}
 }
 
+function bestMove(array) {
+	var best;
+	if (OD % 2 === 1) {
+		best = Math.max(...array);
+	}
+	else {
+		best = Math.min(...array);
+	}
+	console.log(array.indexOf(best));
+}
 
 function Node() {}
 
