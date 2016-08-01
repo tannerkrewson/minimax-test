@@ -2,16 +2,13 @@
 //	minimax-test
 //
 
-// global variables :(
-var pos = new Array();
-var OD;
-
 //	Objects
 
 function Tree(depth, maxGoesFirst) {
 	this.depth = depth;
-	OD = depth - 1;
+	this.originalDepth = depth - 1;
 	this.maxGoesFirst = maxGoesFirst;
+	this.path = new Array();
 
 	//generate the tree
 	var parentNode = new Node();
@@ -50,20 +47,15 @@ function Tree(depth, maxGoesFirst) {
 	}
 }
 
-function getRandom(avrgBranchFactor, variance) {
-	var rand = Math.floor((Math.random() * 2 * variance) + avrgBranchFactor - Math.floor(variance/2))
-	return rand;
-}
-
 Tree.prototype.getBestValue = function() {
-	return Tree.minmax(this.tree.nodeStructure, this.depth, this.maxGoesFirst);
+	return this.minmax(this.tree.nodeStructure, this.depth, this.maxGoesFirst);
 }
 
 Tree.prototype.render = function() {
 	new Treant(this.tree);
 }
 
-Tree.minmax = function(node, depth, max_player) {
+Tree.prototype.minmax = function(node, depth, max_player) {
 	if (depth == 0 || !("children" in node)) {
 		return node.value;
 	}
@@ -74,11 +66,11 @@ Tree.minmax = function(node, depth, max_player) {
 		best_value = Number.NEGATIVE_INFINITY;
 
 		for (var child in node.children) {
-			v = Tree.minmax(node.children[child], depth - 1, false);
+			v = this.minmax(node.children[child], depth - 1, false);
 			best_value = Math.max(v, best_value);
 		}
-		if(depth === OD) {
-			pos.push(best_value);
+		if(depth === this.originalDepth) {
+			this.path.push(best_value);
 		}
 		return best_value;
 	}
@@ -87,25 +79,25 @@ Tree.minmax = function(node, depth, max_player) {
 		best_value = Number.POSITIVE_INFINITY;
 
 		for (var child in node.children) {
-			v = Tree.minmax(node.children[child], depth - 1, true);
+			v = this.minmax(node.children[child], depth - 1, true);
 			best_value = Math.min(v, best_value);
 		}
-		if(depth === OD) {
-			pos.push(best_value);
+		if(depth === this.originalDepth) {
+			this.path.push(best_value);
 		}
 		return best_value;
 	}
 }
 
-function bestMove(array) {
+Tree.prototype.bestMove = function() {
 	var best;
-	if (OD % 2 === 1) {
-		best = Math.max(...array);
+	if (this.originalDepth % 2 === 1) {
+		best = Math.max(...this.path);
 	}
 	else {
-		best = Math.min(...array);
+		best = Math.min(...this.path);
 	}
-	console.log(array.indexOf(best));
+	return this.path.indexOf(best);
 }
 
 function Node() {}
@@ -125,6 +117,14 @@ Node.prototype.setName = function(name) {
 }
 
 
+//	Misc. Functions
+
+function getRandom(avrgBranchFactor, variance) {
+	var rand = Math.floor((Math.random() * 2 * variance) + avrgBranchFactor - Math.floor(variance/2))
+	return rand;
+}
+
+
 //	Main
 
 var tree = new Tree(4, true);
@@ -133,4 +133,9 @@ tree.render();
 function CallMinMax() {
 	var bestValue = tree.getBestValue();
 	alert(bestValue);
+}
+
+function CallBestMove() {
+	var bestMove = tree.bestMove();
+	alert(bestMove);
 }
