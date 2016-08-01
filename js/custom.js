@@ -6,7 +6,6 @@
 
 function Tree(depth, maxGoesFirst) {
 	this.depth = depth;
-	this.originalDepth = depth - 1;
 	this.maxGoesFirst = maxGoesFirst;
 	this.path = new Array();
 
@@ -69,7 +68,7 @@ Tree.prototype.minmax = function(node, depth, max_player) {
 			v = this.minmax(node.children[child], depth - 1, false);
 			best_value = Math.max(v, best_value);
 		}
-		if(depth === this.originalDepth) {
+		if(depth === this.depth - 1) {
 			this.path.push(best_value);
 		}
 		return best_value;
@@ -82,7 +81,7 @@ Tree.prototype.minmax = function(node, depth, max_player) {
 			v = this.minmax(node.children[child], depth - 1, true);
 			best_value = Math.min(v, best_value);
 		}
-		if(depth === this.originalDepth) {
+		if(depth === this.depth - 1) {
 			this.path.push(best_value);
 		}
 		return best_value;
@@ -91,7 +90,7 @@ Tree.prototype.minmax = function(node, depth, max_player) {
 
 Tree.prototype.bestMove = function() {
 	var best;
-	if (this.originalDepth % 2 === 1) {
+	if (this.maxGoesFirst === true) {
 		best = Math.max(...this.path);
 	}
 	else {
